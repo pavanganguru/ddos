@@ -19,15 +19,15 @@ class Server():
     #bind socket to address
     self.serv.bind((self.host, self.port))
     self.serv.listen(5) #Setting up the max number of connections we allow as 2, since we want this to be a weak server
-    print 'Server up and running! Listening for incomming connections...'
+    print ('Server up and running! Listening for incomming connections...')
 
   def collectData(self):
     threading.Timer(2.0, self.collectData).start()
     self.num_intervals += 1
     if self.num_intervals >= 1:
-      print "num connections in last interval", self.num_connects_last_interval
+      print ("num connections in last interval", self.num_connects_last_interval)
       self.avg_connects_per_interval = ((self.avg_connects_per_interval * (self.num_intervals-1)) + self.num_connects_last_interval) / self.num_intervals
-      print "avg connections per interval", self.avg_connects_per_interval
+      print ("avg connections per interval", self.avg_connects_per_interval)
       errorBound = self.avg_connects_per_interval * self.marginOfError(self.num_intervals, 1.96) #95% conf level
       self.checkBound(errorBound)
     self.num_connects_last_interval = 0
@@ -38,28 +38,28 @@ class Server():
 
   def checkBound(self, error):
     if self.num_connects_last_interval > 5 + error and self.ddos_detected == 0:
-      print "DDOS WARNING"
+      print ("DDOS WARNING")
       self.ddos_detected = 1
     elif self.num_connects_last_interval > self.avg_connects_per_interval + error and self.ddos_detected > 0:
-      print "DDOS DETECTED! ERROR:", self.ddos_detected
+      print ("DDOS DETECTED! ERROR:", self.ddos_detected)
       self.ddos_detected += 1
     elif self.num_connects_last_interval < self.avg_connects_per_interval + error and self.ddos_detected > 1:
-      print "ALERT!!! ALERT!!! SERVER UNDER ATTACK..."
-      print "SERVER SHUTTING DOWN..."
+      print ("ALERT!!! ALERT!!! SERVER UNDER ATTACK...")
+      print ("SERVER SHUTTING DOWN...")
       self.ddos_detected = 0
       self.avg_connects_per_interval = 0
       self.num_intervals = -1
       os._exit(1)
     else:
       self.ddos_detected = 0
-    print "error bound:", error
+    print ("error bound:", error)
 
   def acceptConnections(self):
     conn, addr = self.serv.accept() ## accept incoming connection
     data = conn.recv(1024)
-    print "Message From " + addr[0] + " : " + data
-    print 'Connected by ', addr, 'Number of connections: ', self.num_connections
-    print ">>>>>>>>>>>>>"
+    print ("Message From " + addr[0] + " : " + data)
+    print ('Connected by ', addr, 'Number of connections: ', self.num_connections)
+    print (">>>>>>>>>>>>>")
     self.num_connects_last_interval += 1
     self.num_connections += 1
 
