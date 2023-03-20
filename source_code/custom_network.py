@@ -14,7 +14,7 @@ def my_network():
 
     #Add Controller
     info( '***Adding Controller\n' )
-    poxController1 = net.addController('c0',controller=RemoteController,ip="192.168.56.101",port=6633)
+    poxController1 = net.addController('c0',controller=RemoteController,ip="192.168.29.129",port=6633)
     #poxController2 = net.addController(name='c2',controller=POX)
 
     #Add Switches
