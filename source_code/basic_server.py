@@ -1,6 +1,6 @@
-#server code for EE 209 DDoS project by Sohail Virani, Nitish Gupta, Goutham Prasanna @ SJSU
+#server code 
+from socket import * #socket library for network connections
 import time, os, sys, string, threading, math
-from socket import *  #importing the socket library for network connections
 
 class Server():
   def __init__(self, host, port):
